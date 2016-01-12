@@ -1,14 +1,14 @@
 module Spree
   module Core
     module SearchkickFilters
-      def self.applicable_filters(facets)
+      def self.applicable_filters(aggregations)
         es_filters = []
         Spree::Taxonomy.filterable.each do |taxonomy|
-          es_filters << self.process_filter(taxonomy.filter_name, :taxon, facets[taxonomy.filter_name])
+          es_filters << self.process_filter(taxonomy.filter_name, :taxon, aggregations[taxonomy.filter_name])
         end
 
         Spree::Property.filterable.each do |property|
-          es_filters << self.process_filter(property.filter_name, :property, facets[property.filter_name])
+          es_filters << self.process_filter(property.filter_name, :property, aggregations[property.filter_name])
         end
 
         es_filters.uniq
@@ -42,8 +42,8 @@ module Spree
 
       end
 
-      def self.facet_term(facet)
-        facet["terms"].sort_by { |hsh| hsh["term"] }
+      def self.aggregation_term(aggregation)
+        aggregation["terms"].sort_by { |hsh| hsh["term"] }
       end
     end
   end
